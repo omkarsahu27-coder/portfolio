@@ -1,20 +1,13 @@
 ---
+import { site } from '../lib/site';
+const firstName = site.name.split(' ')[0];
 ---
 <a href="/" class="logo">
-  Omkar<span class="accent">.</span>
+  {firstName}<span class="accent">.</span>
 </a>
 
 <style>
-  .logo {
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text);
-  }
-  .logo:hover {
-    color: var(--text);
-  }
-  .accent {
-    color: var(--accent);
-  }
+  .logo { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+  .logo:hover { color: var(--text); }
+  .accent { color: var(--accent); }
 </style>

@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import { site } from '../lib/site';
+---
+
+<BaseLayout title="About">
+  <Section class="fade-in" padding="lg">
+    <div class="about-layout">
+      
+      <!-- Left: Photo -->
+      <div class="about-photo-wrapper">
+        <div class="photo-container">
+          <img 
+            src="/images/me.jpg" 
+            alt={`Photo of ${site.name}`} 
+            loading="eager"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="photo-fallback" style="display: none;">
+            <span>{site.name.split(' ').map(n => n[0]).join('')}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Bio & Facts -->
+      <div class="about-content">
+        <h1>About Me</h1>
+        
+        <div class="bio">
+          {site.bio.map(paragraph => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
+
+        <div class="quick-facts">
+          <div class="fact-item">
+            <span class="fact-label text-muted">Location</span>
+            <span class="fact-value">{site.location}</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-label text-muted">Focus</span>
+            <span class="fact-value">{site.focus}</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-label text-muted">Currently</span>
+            <span class="fact-value">{site.currently}</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-label text-muted">Open to</span>
+            <span class="fact-value">{site.openTo}</span>
+          </div>
+        </div>
+
+        <div class="about-ctas">
+          <Button href="/resume">View Resume</Button>
+          <Button variant="secondary" href="/contact">Get in Touch</Button>
+        </div>
+      </div>
+      
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .about-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  @media (min-width: 768px) {
+    .about-layout {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-16);
+    }
+  }
+
+  .about-photo-wrapper {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  
+  @media (min-width: 768px) {
+    .about-photo-wrapper { flex: 0 0 40%; margin: 0; }
+    .about-content { flex: 0 0 60%; }
+  }
+
+  .photo-container {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border);
+    padding: var(--space-2);
+    position: relative;
+  }
+  
+  .photo-container::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: calc(var(--radius-lg) + 4px);
+    border: 1px solid var(--accent);
+    opacity: 0.3;
+    z-index: -1;
+  }
+
+  .photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: calc(var(--radius-lg) - 4px);
+  }
+
+  .photo-fallback {
+    width: 100%;
+    height: 100%;
+    background-color: var(--surface);
+    border-radius: calc(var(--radius-lg) - 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+
+  .bio {
+    margin-bottom: var(--space-8);
+  }
+
+  .bio p {
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+
+  .quick-facts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    background-color: var(--surface);
+    padding: var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-8);
+  }
+  
+  @media (min-width: 640px) {
+    .quick-facts { grid-template-columns: 1fr 1fr; }
+  }
+
+  .fact-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fact-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+
+  .fact-value {
+    font-weight: 500;
+  }
+
+  .about-ctas {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  
+  @media (min-width: 480px) {
+    .about-ctas { flex-direction: row; }
+  }
+</style>
