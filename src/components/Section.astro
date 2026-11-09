@@ -1,0 +1,33 @@
+---
+import Container from './Container.astro';
+
+interface Props {
+  id?: string;
+  class?: string;
+  padding?: 'sm' | 'md' | 'lg';
+  noContainer?: boolean;
+}
+
+const { id, class: className, padding = 'md', noContainer = false } = Astro.props;
+
+const paddingClass = `py-${padding}`;
+---
+
+<section id={id} class:list={[paddingClass, className]}>
+  {noContainer ? (
+    <slot />
+  ) : (
+    <Container>
+      <slot />
+    </Container>
+  )}
+</section>
+
+<style>
+  section {
+    width: 100%;
+  }
+  .py-sm { padding: var(--space-8) 0; }
+  .py-md { padding: var(--space-16) 0; }
+  .py-lg { padding: var(--space-24) 0; }
+</style>
