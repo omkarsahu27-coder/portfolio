@@ -3,6 +3,7 @@ import sitemap from '@astrojs/sitemap';
 
 
 export default defineConfig({
-  site: 'https://omkar.dev', 
+  // THIS LINE IS REQUIRED FOR THE SITEMAP PLUGIN:
+  site: 'https://portfolio-omkar-sahu.vercel.app', 
   integrations: [sitemap()],
 });
