@@ -2,7 +2,7 @@
 title: 'LecScribe'
 description: 'An AI-powered lecture automation system that records and transcribes classroom audio.'
 tech: ['Python', 'Faster-Whisper', 'Llama 3']
-image: 'public\images\projects\lecscribe.png'
+image: '\public\images\projects\lecscribe.png'
 imageAlt: 'LecScribe dashboard showing an audio transcription'
 liveUrl: 'https://example.com'
 repoUrl: 'https://github.com/omkarsahu27-coder/lecscribe'
