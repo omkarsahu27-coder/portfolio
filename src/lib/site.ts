@@ -10,9 +10,9 @@ export const site = {
   ],
   location: 'Bilaspur, Chhattisgarh, India',
   focus: 'Full-stack Web & AI Integration',
-  currently: 'Building LecScribe & studying for GATE 2027',
+  currently: 'Pursuing M.Tech in Information Technology',
   openTo: 'Full-time software roles',
-  email: 'hello@example.com',
+  email: 'er.omkar2004@gmail.com',
   socials: {
     github: 'https://github.com/omkarsahu27-coder',
     linkedin: 'https://linkedin.com/in/yourhandle',
@@ -24,7 +24,7 @@ export const site = {
     techStackSize: '15+',
   },
   // --- PHASE 5 ADDITIONS ---
-  formspreeId: 'YOUR_FORM_ID', // Replace with your Formspree form ID
+  formspreeId: 'mgaagypz', // Replace with your Formspree form ID
   resumeAvailable: true, // Flip to false if /resume.pdf is missing
   resumeLastUpdated: 'November 2026',
   resumeHighlights: [
