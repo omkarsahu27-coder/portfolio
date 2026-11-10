@@ -23,4 +23,14 @@ export const site = {
     projectsShipped: '10+',
     techStackSize: '15+',
   },
+  // --- PHASE 5 ADDITIONS ---
+  formspreeId: 'YOUR_FORM_ID', // Replace with your Formspree form ID
+  resumeAvailable: true, // Flip to false if /resume.pdf is missing
+  resumeLastUpdated: 'November 2026',
+  resumeHighlights: [
+    'Built LecScribe: an AI-powered lecture automation system using Python, Faster-Whisper, and Llama 3.',
+    'Developed dynamic web applications using Django, FastAPI, and Astro.',
+    'Experienced with local, privacy-focused open-source AI pipelines.',
+    'Actively preparing for GATE 2027 in Computer Science.'
+  ]
 };

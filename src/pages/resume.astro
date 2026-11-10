@@ -1,0 +1,186 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import { site } from '../lib/site';
+
+const pdfPath = "/resume.pdf";
+---
+
+<BaseLayout title="Resume" description="Download my resume as a PDF.">
+  <Section class="fade-in" padding="lg">
+    <div class="page-header">
+      <h1>Resume</h1>
+      <p class="text-muted subtitle">A quick overview of my experience. Download the full PDF below.</p>
+    </div>
+
+    {site.resumeAvailable ? (
+      <>
+        <div class="actions-row">
+          <Button href={pdfPath} download={`${site.name.replace(' ', '')}-Resume.pdf`}>
+            Download PDF
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          </Button>
+          <Button variant="secondary" href={pdfPath} target="_blank" rel="noopener noreferrer">
+            Open in new tab
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </Button>
+        </div>
+
+        <div class="pdf-container-wrapper">
+          <div class="pdf-desktop">
+            <iframe src={`${pdfPath}#view=FitH`} title="Resume preview" class="pdf-iframe"></iframe>
+          </div>
+          <div class="pdf-mobile">
+            <div class="mobile-card">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="file-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <p>Preview not available on mobile devices.</p>
+              <Button href={pdfPath} download={`${site.name.replace(' ', '')}-Resume.pdf`}>Download PDF to View</Button>
+            </div>
+          </div>
+          <p class="update-text text-muted">Last updated: {site.resumeLastUpdated}</p>
+        </div>
+
+        <div class="highlights-section">
+          <h2>Highlights</h2>
+          <ul class="highlights-list">
+            {site.resumeHighlights.map(highlight => (
+              <li class="highlight-item">
+                <span class="check-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+                <span class="highlight-text">{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </>
+    ) : (
+      <div class="empty-state">
+        <p class="text-muted">Resume PDF coming soon.</p>
+        <Button variant="secondary" href="/contact">Get in touch</Button>
+      </div>
+    )}
+  </Section>
+</BaseLayout>
+
+<style>
+  .page-header { margin-bottom: var(--space-8); }
+  .subtitle { font-size: 1.125rem; }
+
+  .actions-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+  
+  @media (min-width: 640px) {
+    .actions-row { flex-direction: row; }
+  }
+
+  .pdf-container-wrapper {
+    margin-bottom: var(--space-12);
+  }
+
+  /* Desktop Iframe */
+  .pdf-desktop {
+    display: none;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    min-height: 600px;
+    max-height: 85vh;
+  }
+  
+  .pdf-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: var(--surface);
+  }
+
+  @media (min-width: 768px) {
+    .pdf-desktop { display: block; }
+    .pdf-mobile { display: none !important; }
+  }
+
+  /* Mobile Fallback */
+  .pdf-mobile {
+    display: flex;
+    justify-content: center;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-12) var(--space-6);
+    text-align: center;
+  }
+  
+  .mobile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .file-icon {
+    color: var(--text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .update-text {
+    font-size: 0.875rem;
+    text-align: right;
+    margin-top: var(--space-2);
+  }
+
+  /* Highlights */
+  .highlights-section { margin-top: var(--space-12); }
+  .highlights-section h2 { margin-bottom: var(--space-6); }
+
+  .highlights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-6);
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+  }
+  
+  .highlight-item:hover {
+    transform: translateX(4px);
+    border-color: var(--border);
+  }
+
+  .check-icon {
+    color: var(--accent);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .highlight-text {
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-16) 0;
+    background-color: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-8);
+  }
+</style>

@@ -1,0 +1,509 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import { site } from '../lib/site';
+---
+
+<BaseLayout title="Contact" description="Have a project, role, or question? Send me a message.">
+  <Section class="fade-in" padding="lg">
+    <div class="page-header">
+      <h1>Get in Touch</h1>
+      <p class="text-muted subtitle">Have a project, role, or question? Send me a message &mdash; I'll reply within 24&ndash;48 hours.</p>
+    </div>
+
+    <div class="contact-layout">
+      <!-- Left Column: Info -->
+      <aside class="contact-info">
+        <div class="info-card">
+          <h2>Other ways to reach me</h2>
+          
+          <ul class="info-list">
+            <li class="info-row">
+              <span class="info-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </span>
+              <div class="info-content">
+                <a href={`mailto:${site.email}`} class="info-link">{site.email}</a>
+                <button type="button" class="copy-btn" data-copy={site.email} aria-label="Copy email address">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+              </div>
+            </li>
+            <li class="info-row">
+              <span class="info-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+              </span>
+              <div class="info-content">
+                <a href={site.socials.github} target="_blank" rel="noopener noreferrer" class="info-link">GitHub Profile</a>
+              </div>
+            </li>
+            <li class="info-row">
+              <span class="info-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </span>
+              <div class="info-content">
+                <a href={site.socials.linkedin} target="_blank" rel="noopener noreferrer" class="info-link">LinkedIn Profile</a>
+              </div>
+            </li>
+            <li class="info-row">
+              <span class="info-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </span>
+              <div class="info-content">
+                <span class="info-text">{site.location}</span>
+              </div>
+            </li>
+          </ul>
+          
+          <p class="response-time text-muted">Usually replies within 1&ndash;2 business days.</p>
+        </div>
+      </aside>
+
+      <!-- Right Column: Form -->
+      <div class="form-wrapper">
+        <form 
+          id="contact-form" 
+          action={`https://formspree.io/f/${site.formspreeId}`} 
+          method="POST" 
+          novalidate
+        >
+          <!-- Global Error Banner -->
+          <div id="form-error-banner" class="form-banner error-banner" role="alert" style="display: none;">
+            Something went wrong. Please try again, or email me directly at {site.email}.
+          </div>
+
+          <!-- Honeypot -->
+          <label class="sr-only">
+            Don't fill this out if you're human:
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          </label>
+
+          <div class="form-group">
+            <label for="name">Name <span class="required" aria-hidden="true">*</span></label>
+            <input type="text" id="name" name="name" required minlength="2" aria-required="true" />
+            <p id="name-error" class="error-msg" role="alert"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email <span class="required" aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" required aria-required="true" />
+            <p id="email-error" class="error-msg" role="alert"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject <span class="text-muted optional-label">(Optional)</span></label>
+            <input type="text" id="subject" name="subject" maxlength="100" />
+            <p id="subject-error" class="error-msg" role="alert"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" rows="5" required minlength="10" maxlength="1000" aria-required="true"></textarea>
+            <div class="textarea-footer">
+              <p id="message-error" class="error-msg" role="alert"></p>
+              <span id="char-count" class="char-count text-muted" aria-live="polite">0 / 1000</span>
+            </div>
+          </div>
+
+          <Button type="submit" id="submit-btn" class="submit-button">
+            <span class="btn-text">Send Message</span>
+            <span class="btn-loader" aria-hidden="true" style="display: none;">
+              <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              Sending...
+            </span>
+          </Button>
+        </form>
+
+        <!-- Success State Card -->
+        <div id="success-state" class="success-card" style="display: none;" role="status">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+          <h2 id="success-title">Thanks!</h2>
+          <p class="text-muted">Your message is on its way. I'll get back to you soon.</p>
+          <Button type="button" variant="secondary" id="reset-form-btn">Send another message</Button>
+        </div>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<script>
+  // -- COPY TO CLIPBOARD --
+  const copyBtns = document.querySelectorAll('.copy-btn');
+  copyBtns.forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const email = (e.currentTarget as HTMLButtonElement).dataset.copy;
+      if (email) {
+        try {
+          await navigator.clipboard.writeText(email);
+          const icon = btn.innerHTML;
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.innerHTML = icon;
+            btn.classList.remove('copied');
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy', err);
+        }
+      }
+    });
+  });
+
+  // -- FORM LOGIC & VALIDATION --
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const successState = document.getElementById('success-state');
+  const errorBanner = document.getElementById('form-error-banner');
+  const resetBtn = document.getElementById('reset-form-btn');
+  const submitBtn = document.getElementById('submit-btn');
+  const btnText = submitBtn?.querySelector('.btn-text') as HTMLElement;
+  const btnLoader = submitBtn?.querySelector('.btn-loader') as HTMLElement;
+  
+  const msgInput = document.getElementById('message') as HTMLTextAreaElement;
+  const charCount = document.getElementById('char-count');
+  
+  // Validation Rules
+  const validators = {
+    name: (val: string) => val.trim().length >= 2 ? '' : 'Name must be at least 2 characters.',
+    email: (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) ? '' : 'Please enter a valid email address.',
+    message: (val: string) => val.trim().length >= 10 ? '' : 'Message must be at least 10 characters long.'
+  };
+
+  function validateField(input: HTMLInputElement | HTMLTextAreaElement) {
+    const id = input.id as keyof typeof validators;
+    if (!validators[id]) return true;
+
+    const errorMsg = validators[id](input.value);
+    const errorEl = document.getElementById(`${id}-error`);
+    
+    if (errorMsg) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', `${id}-error`);
+      if (errorEl) {
+        errorEl.textContent = errorMsg;
+        errorEl.style.display = 'block';
+      }
+      return false;
+    } else {
+      input.removeAttribute('aria-invalid');
+      if (errorEl) {
+        errorEl.textContent = '';
+        errorEl.style.display = 'none';
+      }
+      return true;
+    }
+  }
+
+  // Character Counter
+  if (msgInput && charCount) {
+    msgInput.addEventListener('input', () => {
+      charCount.textContent = `${msgInput.value.length} / 1000`;
+    });
+  }
+
+  // Validate on blur
+  ['name', 'email', 'message'].forEach(id => {
+    const input = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement;
+    input?.addEventListener('blur', () => validateField(input));
+  });
+
+  // Handle Submit via Fetch (AJAX)
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (errorBanner) errorBanner.style.display = 'none';
+    
+    // Run all validations
+    let isValid = true;
+    let firstInvalid: HTMLElement | null = null;
+    
+    ['name', 'email', 'message'].forEach(id => {
+      const input = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement;
+      if (input && !validateField(input)) {
+        isValid = false;
+        if (!firstInvalid) firstInvalid = input;
+      }
+    });
+
+    if (!isValid) {
+      firstInvalid?.focus();
+      return;
+    }
+
+    // Set Loading State
+    if (submitBtn) submitBtn.setAttribute('disabled', 'true');
+    if (btnText) btnText.style.display = 'none';
+    if (btnLoader) btnLoader.style.display = 'flex';
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        // Success
+        form.style.display = 'none';
+        if (successState) {
+          successState.style.display = 'flex';
+          const nameInput = document.getElementById('name') as HTMLInputElement;
+          const successTitle = document.getElementById('success-title');
+          if (nameInput && successTitle) {
+            successTitle.textContent = `Thanks, ${nameInput.value.split(' ')[0]}!`;
+          }
+        }
+        form.reset();
+        if (charCount) charCount.textContent = '0 / 1000';
+      } else {
+        // Formspree API Error
+        throw new Error('Formspree returned an error');
+      }
+    } catch (error) {
+      // Network/Fetch Error
+      if (errorBanner) errorBanner.style.display = 'block';
+    } finally {
+      // Restore Button
+      if (submitBtn) submitBtn.removeAttribute('disabled');
+      if (btnText) btnText.style.display = 'inline-block';
+      if (btnLoader) btnLoader.style.display = 'none';
+    }
+  });
+
+  // Reset form view
+  resetBtn?.addEventListener('click', () => {
+    if (successState) successState.style.display = 'none';
+    form.style.display = 'block';
+    // Clear validation states visually
+    ['name', 'email', 'message'].forEach(id => {
+      const input = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement;
+      input?.removeAttribute('aria-invalid');
+      const errorEl = document.getElementById(`${id}-error`);
+      if (errorEl) errorEl.style.display = 'none';
+    });
+  });
+</script>
+
+<style>
+  .page-header { margin-bottom: var(--space-10); }
+  .subtitle { max-width: 600px; font-size: 1.125rem; }
+
+  .contact-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+  
+  @media (min-width: 768px) {
+    .contact-layout {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-12);
+    }
+    .contact-info { flex: 0 0 320px; }
+    .form-wrapper { flex: 1; }
+  }
+
+  /* Info Card */
+  .info-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+  }
+
+  .info-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .info-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .info-icon {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+  }
+
+  .info-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .info-link {
+    color: var(--text);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+  }
+  .info-link:hover { color: var(--accent); }
+  .info-text { color: var(--text); }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+  }
+  .copy-btn:hover {
+    color: var(--text);
+    background-color: var(--border);
+  }
+  .copy-btn.copied { color: var(--accent); }
+
+  .response-time { font-size: 0.85rem; margin: 0; }
+
+  /* Form */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--space-6);
+  }
+
+  label {
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+
+  .required { color: #ef4444; margin-left: 2px; }
+  .optional-label { font-size: 0.8rem; font-weight: normal; margin-left: 4px; }
+
+  input, textarea {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    padding: var(--space-3);
+    font-size: 1rem;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  input[aria-invalid="true"], textarea[aria-invalid="true"] {
+    border-color: #ef4444;
+  }
+  input[aria-invalid="true"]:focus, textarea[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+  }
+
+  textarea { resize: vertical; min-height: 120px; }
+
+  .textarea-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: var(--space-1);
+  }
+
+  .char-count { font-size: 0.8rem; margin-left: auto; }
+
+  .error-msg {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: var(--space-1);
+    display: none;
+    margin-bottom: 0;
+  }
+
+  .form-banner {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-6);
+    font-size: 0.95rem;
+  }
+  
+  .error-banner {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+
+  /* Button Spinner state */
+  .submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .btn-loader {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .spinner {
+    animation: rotate 2s linear infinite;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .spinner .path {
+    stroke: currentColor;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes rotate { 100% { transform: rotate(360deg); } }
+  @keyframes dash {
+    0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
+    50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
+    100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+  }
+
+  /* Success State */
+  .success-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    background-color: rgba(99, 102, 241, 0.1);
+    color: var(--accent);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+  }
+
+  .success-card h2 { margin-bottom: var(--space-2); }
+  .success-card p { margin-bottom: var(--space-8); }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

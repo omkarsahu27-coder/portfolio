@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import { getSkillsByCategory } from '../lib/content';
+
+const skills = await getSkillsByCategory();
+---
+
+<BaseLayout title="Skills" description="Tools, languages, and technologies I work with.">
+  <Section class="fade-in" padding="lg">
+    <div class="page-header">
+      <h1>Skills</h1>
+      <p class="text-muted subtitle">Tools, languages, and technologies I work with.</p>
+    </div>
+
+    {skills.length > 0 ? (
+      <div class="skills-grid">
+        {skills.map((categoryGroup, index) => (
+          /* Using nth-child in CSS for subtle rotation, but setting an inline variable for ease */
+          <div class="skill-card" style={`--animation-delay: ${index * 50}ms`}>
+            <h2>{categoryGroup.category}</h2>
+            <div class="skill-list">
+              {categoryGroup.items.map(item => (
+                <span class="skill-pill">{item}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <p class="text-muted">Skills list coming soon.</p>
+      </div>
+    )}
+  </Section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: var(--space-12);
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .skills-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .skill-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    transition: border-color var(--transition-base), transform var(--transition-base);
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: var(--animation-delay);
+    opacity: 0;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .skill-card { animation: none; opacity: 1; }
+  }
+
+  .skill-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .skill-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-6);
+    color: var(--text);
+  }
+
+  /* Subtle accent coloring based on odd/even to visually break up the grid */
+  .skill-card:nth-child(odd) h2 { color: var(--accent-hover); }
+  .skill-card:nth-child(even) h2 { color: var(--text); }
+
+  .skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .skill-pill {
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-12) 0;
+    background-color: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+  }
+</style>

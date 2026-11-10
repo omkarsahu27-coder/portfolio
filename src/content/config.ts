@@ -7,6 +7,7 @@ const projectsCollection = defineCollection({
     description: z.string(),
     tech: z.array(z.string()),
     image: z.string(),
+    imageAlt: z.string().optional(),
     liveUrl: z.string().url().optional(),
     repoUrl: z.string().url().optional(),
     featured: z.boolean().default(false),
@@ -20,8 +21,9 @@ const educationCollection = defineCollection({
   schema: z.object({
     degree: z.string(),
     institution: z.string(),
-    startDate: z.date(),
-    endDate: z.date().optional(),
+    startDate: z.date().optional(),       // Make this optional
+    endDate: z.date().optional(),         // Make this optional
+    yearOfPassing: z.string().optional(), // Add this new field
     description: z.string().optional(),
     order: z.number()
   })

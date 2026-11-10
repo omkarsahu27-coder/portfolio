@@ -7,13 +7,15 @@ interface Props {
 }
 
 const { project, featured = false } = Astro.props;
-const { title, description, tech, image, liveUrl, repoUrl } = project.data;
+const { title, description, tech, image, imageAlt, liveUrl, repoUrl, date } = project.data;
+const detailUrl = `/projects/${project.slug}`;
+const formattedDate = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 ---
 
-<article class:list={["project-card", { "is-featured": featured }]}>
+<article class:list={["project-card", { "is-featured": featured }]} data-tech={tech.join(',')}>
   <div class="image-wrapper">
     {image ? (
-      <img src={image} alt={`Screenshot of ${title}`} loading="lazy" />
+      <img src={image} alt={imageAlt || `Screenshot of ${title}`} loading="lazy" />
     ) : (
       <div class="image-fallback">
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
@@ -22,28 +24,39 @@ const { title, description, tech, image, liveUrl, repoUrl } = project.data;
   </div>
   
   <div class="content">
-    <div class="tech-stack">
-      {tech && tech.map((item) => (
-        <span class="tech-badge">{item}</span>
-      ))}
+    <div class="meta-row">
+      <time class="date text-muted">{formattedDate}</time>
     </div>
-    
-    <h3 class="title">{title}</h3>
+
+    <h3 class="title">
+      <a href={detailUrl} class="main-link">
+        {title}
+      </a>
+    </h3>
     <p class="description">{description}</p>
     
+    <div class="tech-stack">
+      {tech && tech.slice(0, 4).map((item) => (
+        <span class="tech-badge">{item}</span>
+      ))}
+      {tech.length > 4 && <span class="tech-badge">+{tech.length - 4}</span>}
+    </div>
+    
     <div class="links">
-      {liveUrl && (
-        <a href={liveUrl} target="_blank" rel="noopener noreferrer" class="link-item" aria-label={`View live site for ${title}`}>
-          View project
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-        </a>
-      )}
-      {repoUrl && (
-        <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="link-item" aria-label={`View source code for ${title}`}>
-          Source code
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-        </a>
-      )}
+      <span class="internal-link" aria-hidden="true">View details &rarr;</span>
+      
+      <div class="external-links">
+        {liveUrl && (
+          <a href={liveUrl} target="_blank" rel="noopener noreferrer" class="ext-link" aria-label={`View live site for ${title}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        )}
+        {repoUrl && (
+          <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="ext-link" aria-label={`View source code for ${title}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </a>
+        )}
+      </div>
     </div>
   </div>
 </article>
@@ -58,9 +71,10 @@ const { title, description, tech, image, liveUrl, repoUrl } = project.data;
     display: flex;
     flex-direction: column;
     height: 100%;
+    position: relative;
   }
 
-  .project-card:hover {
+  .project-card:hover, .project-card:focus-within {
     transform: translateY(-2px);
     border-color: var(--accent);
     box-shadow: var(--shadow-md);
@@ -96,26 +110,30 @@ const { title, description, tech, image, liveUrl, repoUrl } = project.data;
     flex: 1;
   }
 
-  .tech-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-bottom: var(--space-4);
+  .meta-row {
+    margin-bottom: var(--space-2);
   }
-
-  .tech-badge {
-    font-size: 0.75rem;
+  
+  .date {
+    font-size: 0.8rem;
     font-weight: 500;
-    padding: 2px var(--space-2);
-    background-color: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-full);
-    color: var(--text-muted);
   }
 
   .title {
     font-size: 1.25rem;
     margin-bottom: var(--space-2);
+  }
+
+  /* Magic link trick: stretches the title link over the whole card */
+  .main-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  
+  .main-link:focus {
+    outline: none; /* Focus handled by :focus-within on card */
   }
 
   .description {
@@ -128,22 +146,62 @@ const { title, description, tech, image, liveUrl, repoUrl } = project.data;
     flex: 1;
   }
 
-  .links {
+  .tech-stack {
     display: flex;
-    gap: var(--space-4);
-    margin-top: auto;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
   }
 
-  .link-item {
+  .tech-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 2px var(--space-2);
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+  }
+
+  .links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    position: relative;
+    z-index: 2; /* Sits above the stretched main link */
+  }
+
+  .internal-link {
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
+    color: var(--text-muted);
+    transition: color var(--transition-fast);
   }
   
-  .link-item:hover {
+  .project-card:hover .internal-link, 
+  .project-card:focus-within .internal-link {
     color: var(--accent);
+  }
+
+  .external-links {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .ext-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2);
+    color: var(--text-muted);
+    background-color: var(--bg);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+  }
+  
+  .ext-link:hover, .ext-link:focus-visible {
+    color: var(--accent);
+    background-color: var(--surface);
   }
 </style>

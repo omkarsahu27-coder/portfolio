@@ -1,0 +1,215 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getAllProjectsSorted, getAllTechTags } from '../lib/content';
+
+const projects = await getAllProjectsSorted();
+const techTags = await getAllTechTags();
+---
+
+<BaseLayout title="Projects" description="A selection of things I've designed, built, and shipped.">
+  <Section class="fade-in" padding="lg">
+    <div class="page-header">
+      <h1>Projects</h1>
+      <p class="text-muted subtitle">A selection of things I've designed, built, and shipped.</p>
+    </div>
+
+    <!-- Filter Bar -->
+    {projects.length > 0 && (
+      <div class="filter-container">
+        <div class="filter-scroll" role="group" aria-label="Filter projects by technology">
+          <button type="button" class="filter-chip active" data-tag="all" aria-pressed="true">
+            All <span class="count">({projects.length})</span>
+          </button>
+          {techTags.map(({ tag, count }) => (
+            <button type="button" class="filter-chip" data-tag={tag} aria-pressed="false">
+              {tag} <span class="count">({count})</span>
+            </button>
+          ))}
+        </div>
+        <!-- Accessibility live region for filter results -->
+        <p id="filter-announce" class="sr-only" aria-live="polite">Showing all {projects.length} projects.</p>
+      </div>
+    )}
+
+    <!-- Project Grid -->
+    {projects.length > 0 ? (
+      <div class="project-grid" id="project-grid">
+        {projects.map(project => (
+          <div class="project-wrapper" data-tech={project.data.tech.join(',')}>
+            <ProjectCard project={project} />
+          </div>
+        ))}
+      </div>
+      
+      <!-- Filter Empty State (Hidden by default) -->
+      <div id="filter-empty" class="filter-empty-state" style="display: none;">
+        <p class="text-muted">No projects match this filter.</p>
+        <Button variant="ghost" id="clear-filter-btn">Clear filters</Button>
+      </div>
+    ) : (
+      <!-- Absolute Empty State -->
+      <div class="empty-state">
+        <p class="text-muted">No projects yet — check back soon.</p>
+        <Button variant="secondary" href="/">Back home</Button>
+      </div>
+    )}
+  </Section>
+</BaseLayout>
+
+<script>
+  const chips = document.querySelectorAll('.filter-chip');
+  const wrappers = document.querySelectorAll('.project-wrapper');
+  const emptyState = document.getElementById('filter-empty');
+  const clearBtn = document.getElementById('clear-filter-btn');
+  const announcer = document.getElementById('filter-announce');
+
+  function filterProjects(tag: string) {
+    let visibleCount = 0;
+    
+    // Update chips
+    chips.forEach(chip => {
+      const isSelected = chip.getAttribute('data-tag') === tag;
+      if (isSelected) {
+        chip.classList.add('active');
+        chip.setAttribute('aria-pressed', 'true');
+      } else {
+        chip.classList.remove('active');
+        chip.setAttribute('aria-pressed', 'false');
+      }
+    });
+
+    // Update cards
+    wrappers.forEach(wrapper => {
+      const el = wrapper as HTMLElement;
+      if (tag === 'all' || el.dataset.tech?.split(',').includes(tag)) {
+        el.style.display = 'block';
+        visibleCount++;
+      } else {
+        el.style.display = 'none';
+      }
+    });
+
+    // Update URL Hash without scrolling
+    if (tag === 'all') {
+      history.replaceState(null, '', window.location.pathname);
+    } else {
+      history.replaceState(null, '', `#filter=${encodeURIComponent(tag)}`);
+    }
+
+    // Toggle Empty State & Announce
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+    
+    if (announcer) {
+      announcer.textContent = `Showing ${visibleCount} project${visibleCount !== 1 ? 's' : ''}.`;
+    }
+  }
+
+  // Bind clicks
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      filterProjects(chip.getAttribute('data-tag') || 'all');
+    });
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => filterProjects('all'));
+  }
+
+  // Check URL hash on load
+  const hash = window.location.hash;
+  if (hash.startsWith('#filter=')) {
+    const tagFromUrl = decodeURIComponent(hash.replace('#filter=', ''));
+    const chipExists = Array.from(chips).some(c => c.getAttribute('data-tag') === tagFromUrl);
+    if (chipExists) filterProjects(tagFromUrl);
+  }
+</script>
+
+<style>
+  .page-header {
+    margin-bottom: var(--space-8);
+  }
+  
+  .subtitle {
+    font-size: 1.125rem;
+  }
+
+  .filter-container {
+    margin-bottom: var(--space-8);
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-4));
+    z-index: 10;
+    background-color: var(--bg);
+    padding: var(--space-2) 0;
+    /* Blend mask for smooth edges */
+    box-shadow: 0 0 10px 10px var(--bg);
+  }
+
+  .filter-scroll {
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    padding-bottom: var(--space-2);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .filter-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .filter-chip {
+    flex-shrink: 0;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+  }
+
+  .filter-chip:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .filter-chip.active {
+    background-color: var(--accent);
+    color: var(--text);
+    border-color: var(--accent);
+  }
+  
+  .filter-chip .count {
+    opacity: 0.7;
+    margin-left: 2px;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 640px) {
+    .project-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  
+  @media (min-width: 1024px) {
+    .project-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .filter-empty-state, .empty-state {
+    text-align: center;
+    padding: var(--space-16) 0;
+    background-color: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-8);
+  }
+</style>

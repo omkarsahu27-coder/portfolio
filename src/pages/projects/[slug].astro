@@ -1,0 +1,266 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Button from '../../components/Button.astro';
+import { getAllProjectsSorted, getRelatedProjects } from '../../lib/content';
+import '../../styles/prose.css';
+
+export async function getStaticPaths() {
+  const projects = await getAllProjectsSorted();
+  
+  return projects.map((project, index) => {
+    return {
+      params: { slug: project.slug },
+      props: { 
+        project,
+        prevProject: index > 0 ? projects[index - 1] : null,
+        nextProject: index < projects.length - 1 ? projects[index + 1] : null
+      }
+    };
+  });
+}
+
+const { project, prevProject, nextProject } = Astro.props;
+const { Content } = await project.render();
+const relatedProjects = await getRelatedProjects(project.slug);
+const formattedDate = project.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+---
+
+<BaseLayout 
+  title={project.data.title} 
+  description={project.data.description}
+  ogImage={project.data.image}
+>
+  <Section class="fade-in" padding="lg">
+    
+    <!-- Hero / Header -->
+    <div class="project-header">
+      <a href="/projects" class="back-link">&larr; Back to projects</a>
+      <h1 class="title">{project.data.title}</h1>
+      <p class="description text-muted">{project.data.description}</p>
+      
+      <div class="tech-stack">
+        {project.data.tech.map(t => <span class="tech-badge">{t}</span>)}
+      </div>
+      
+      <div class="action-buttons">
+        {project.data.liveUrl && (
+          <Button href={project.data.liveUrl} target="_blank" rel="noopener noreferrer">
+            View Live
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px;"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </Button>
+        )}
+        {project.data.repoUrl && (
+          <Button variant="secondary" href={project.data.repoUrl} target="_blank" rel="noopener noreferrer">
+            View Source
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px;"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </Button>
+        )}
+      </div>
+    </div>
+
+    <!-- Featured Image -->
+    {project.data.image && (
+      <div class="featured-image">
+        <img src={project.data.image} alt={project.data.imageAlt || `Screenshot of ${project.data.title}`} />
+      </div>
+    )}
+
+    <!-- Main Content Layout -->
+    <div class="content-layout">
+      <div class="main-body">
+        <section class="prose">
+          <Content />
+        </section>
+      </div>
+      
+      <aside class="sidebar">
+        <div class="meta-block">
+          <h3 class="meta-label">Timeline</h3>
+          <p class="meta-value">{formattedDate}</p>
+        </div>
+        <div class="meta-block">
+          <h3 class="meta-label">Role</h3>
+          <p class="meta-value">Lead Developer</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Pagination -->
+    <nav class="project-nav" aria-label="Project navigation">
+      {prevProject ? (
+        <a href={`/projects/${prevProject.slug}`} class="nav-btn prev">
+          <span class="nav-label">Previous</span>
+          <span class="nav-title">{prevProject.data.title}</span>
+        </a>
+      ) : <div></div>}
+      
+      {nextProject ? (
+        <a href={`/projects/${nextProject.slug}`} class="nav-btn next">
+          <span class="nav-label">Next</span>
+          <span class="nav-title">{nextProject.data.title}</span>
+        </a>
+      ) : <div></div>}
+    </nav>
+
+    <!-- Related Projects -->
+    {relatedProjects.length > 0 && (
+      <div class="related-section">
+        <h2>Related projects</h2>
+        <div class="related-grid">
+          {relatedProjects.map(p => (
+            <ProjectCard project={p} />
+          ))}
+        </div>
+      </div>
+    )}
+  </Section>
+</BaseLayout>
+
+<style>
+  .project-header {
+    max-width: 800px;
+    margin-bottom: var(--space-10);
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: var(--space-6);
+  }
+  
+  .back-link:hover { color: var(--accent); }
+
+  .title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: var(--space-4);
+  }
+
+  .description {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .tech-badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 4px var(--space-3);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .featured-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: var(--space-12);
+  }
+  
+  .featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .content-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+    margin-bottom: var(--space-16);
+  }
+  
+  @media (min-width: 1024px) {
+    .content-layout {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+    .main-body { flex: 1; }
+    .sidebar {
+      flex: 0 0 250px;
+      position: sticky;
+      top: calc(var(--header-height) + var(--space-10));
+    }
+  }
+
+  .sidebar {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .meta-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+
+  .meta-value { font-weight: 500; }
+
+  .project-nav {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-8);
+    margin-bottom: var(--space-16);
+  }
+
+  .nav-btn {
+    display: flex;
+    flex-direction: column;
+    max-width: 45%;
+    transition: transform var(--transition-fast);
+  }
+  
+  .nav-btn.next { text-align: right; }
+  .nav-btn:hover { transform: translateY(-2px); }
+
+  .nav-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .nav-title {
+    font-weight: 600;
+    color: var(--text);
+  }
+  
+  .nav-btn:hover .nav-title { color: var(--accent); }
+
+  .related-section h2 { margin-bottom: var(--space-8); }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  
+  @media (min-width: 768px) {
+    .related-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  }
+</style>
