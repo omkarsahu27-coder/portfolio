@@ -1,51 +1,110 @@
 ---
-import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../lib/site';
+import '../styles/global.css';
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
   ogImage?: string;
+  canonicalURL?: string;
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
 }
 
-const { 
-  title, 
-  description = site.description, 
-  ogImage = "/images/og-default.jpg" 
+const {
+  title,
+  description = site.description,
+  ogImage = site.ogImage,
+  canonicalURL = new URL(Astro.url.pathname, site.url).href,
+  noindex = false,
+  ogType = 'website'
 } = Astro.props;
+
+const pageTitle = title ? `${title} | ${site.name}` : site.title;
+const absoluteOgImage = new URL(ogImage, site.url).href;
+
+// Base JSON-LD Person Schema
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": site.name,
+  "url": site.url,
+  "jobTitle": site.role,
+  "description": site.tagline,
+  "image": new URL("/me.jpg", site.url).href,
+  "sameAs": Object.values(site.socials),
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bilaspur",
+    "addressRegion": "Chhattisgarh",
+    "addressCountry": "IN"
+  }
+};
+
+// Website Schema (Only on Home Page)
+const isHome = Astro.url.pathname === '/';
+const websiteSchema = isHome ? {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": site.name,
+  "url": site.url,
+  "description": site.description,
+  "inLanguage": site.locale
+} : null;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Title & Meta -->
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title} — {site.name}</title>
+    <meta name="author" content={site.author} />
+    <meta name="theme-color" content={site.themeColor} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
+    {site.keywords.length > 0 && <meta name="keywords" content={site.keywords.join(', ')} />}
 
-    <meta name="theme-color" content="#0d0d0d" />
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={site.locale} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteOgImage} />
+    {site.twitterHandle && <meta name="twitter:creator" content={`@${site.twitterHandle}`} />}
+
+    <!-- Performance: Preconnects & Preloads -->
+    <link rel="preconnect" href="https://formspree.io" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/_astro/poppins-400.woff2" crossorigin="anonymous" />
     <link rel="preload" as="font" type="font/woff2" href="/_astro/poppins-600.woff2" crossorigin="anonymous" />
-    
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
-    <meta property="og:title" content={`${title} — ${site.name}`} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, Astro.url)} />
 
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={`${title} — ${site.name}`} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(ogImage, Astro.url)} />
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />}
+
+    <!-- Vercel Analytics (Optional - uncomment to enable) -->
+    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
-    <a href="#main" class="skip-link">Skip to content</a>
     <div class="layout-wrapper">
       <Header />
       <main id="main">
@@ -53,17 +112,12 @@ const {
       </main>
       <Footer />
     </div>
-  </body>
-  <script>
+
+    <!-- Scroll Animations -->
+    <script>
       import { initReveal } from '../scripts/reveal.js';
-      // Run on initial load
       initReveal();
-      // Optional: If you ever add View Transitions, run on astro:page-load
       document.addEventListener('astro:page-load', initReveal);
     </script>
+  </body>
 </html>
-
-<style>
-  .layout-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
-  main { flex: 1; display: flex; flex-direction: column; }
-</style>

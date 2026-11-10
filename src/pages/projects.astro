@@ -34,23 +34,24 @@ const techTags = await getAllTechTags();
       </div>
     )}
 
-    <!-- Project Grid -->
+<!-- Project Grid -->
     {projects.length > 0 ? (
-      <div class="project-grid" id="project-grid">
-        {projects.map(project => (
-          <div class="project-wrapper" data-tech={project.data.tech.join(',')}>
-            <ProjectCard project={project} />
-          </div>
-        ))}
-      </div>
-      
-      <!-- Filter Empty State (Hidden by default) -->
-      <div id="filter-empty" class="filter-empty-state" style="display: none;">
-        <p class="text-muted">No projects match this filter.</p>
-        <Button variant="ghost" id="clear-filter-btn">Clear filters</Button>
-      </div>
+      <>
+        <div class="project-grid" id="project-grid">
+          {projects.map((project, index) => (
+            <div class="project-wrapper reveal" data-tech={project.data.tech.join(',')} data-delay={(index % 3) * 100}>
+              <ProjectCard project={project} />
+            </div>
+          ))}
+        </div>
+        
+        {/* Filter Empty State (Hidden by default) */}
+        <div id="filter-empty" class="filter-empty-state" style="display: none;">
+          <p class="text-muted">No projects match this filter.</p>
+          <Button variant="ghost" id="clear-filter-btn">Clear filters</Button>
+        </div>
+      </>
     ) : (
-      <!-- Absolute Empty State -->
       <div class="empty-state">
         <p class="text-muted">No projects yet — check back soon.</p>
         <Button variant="secondary" href="/">Back home</Button>

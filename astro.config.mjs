@@ -2,10 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://your-portfolio-url.com',
+  site: 'https://omkarsahu.dev', // Ensure this matches site.ts
   integrations: [sitemap()],
-  compressHTML: true,
-  build: {
-    format: 'directory'
-  }
+  compressHTML: true, // Performance optimization
 });

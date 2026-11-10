@@ -1,20 +1,22 @@
 ---
-interface Props {
-  href?: string;
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md';
-  type?: 'button' | 'submit' | 'reset';
-  class?: string;
-}
+import type { HTMLAttributes } from 'astro/types';
 
-const { href, variant = 'primary', size = 'md', type = 'button', class: className, ...rest } = Astro.props;
-const Tag = href ? 'a' : 'button';
+type Props = HTMLAttributes<'button'> & Omit<HTMLAttributes<'a'>, 'type'> & {
+  variant?: 'primary' | 'secondary' | 'ghost';
+};
+
+const { variant = 'primary', href, class: className, ...rest } = Astro.props;
 ---
 
-<Tag href={href} type={href ? undefined : type} class:list={['btn', `btn-${variant}`, `btn-${size}`, className]} {...rest}>
-  <slot />
-</Tag>
-
+{href ? (
+  <a href={href} class:list={['btn', `btn-${variant}`, className]} {...rest}>
+    <slot />
+  </a>
+) : (
+  <button class:list={['btn', `btn-${variant}`, className]} {...rest}>
+    <slot />
+  </button>
+)}
 <style>
   .btn {
     display: inline-flex;

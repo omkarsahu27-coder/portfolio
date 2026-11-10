@@ -209,25 +209,25 @@ import { site } from '../lib/site';
     input?.addEventListener('blur', () => validateField(input));
   });
 
-  // Handle Submit via Fetch (AJAX)
+// Handle Submit via Fetch (AJAX)
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (errorBanner) errorBanner.style.display = 'none';
     
     // Run all validations
     let isValid = true;
-    let firstInvalid: HTMLElement | null = null;
     
     ['name', 'email', 'message'].forEach(id => {
       const input = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement;
       if (input && !validateField(input)) {
         isValid = false;
-        if (!firstInvalid) firstInvalid = input;
       }
     });
 
     if (!isValid) {
-      firstInvalid?.focus();
+      // Let the browser find the first element we just marked as invalid
+      const firstInvalidEl = form.querySelector('[aria-invalid="true"]') as HTMLElement;
+      firstInvalidEl?.focus();
       return;
     }
 

@@ -1,4 +1,5 @@
 export const site = {
+  // --- EXISTING FIELDS ---
   name: 'Omkar Sahu',
   role: 'Software & AI Engineer',
   tagline: 'Software developer building fast, accessible web apps and AI tools.',
@@ -10,12 +11,12 @@ export const site = {
   ],
   location: 'Bilaspur, Chhattisgarh, India',
   focus: 'Full-stack Web & AI Integration',
-  currently: 'Pursuing M.Tech in Information Technology',
+  currently: 'Building LecScribe & studying for GATE 2027',
   openTo: 'Full-time software roles',
   email: 'er.omkar2004@gmail.com',
   socials: {
     github: 'https://github.com/omkarsahu27-coder',
-    linkedin: 'https://linkedin.com/in/yourhandle',
+    linkedin: 'https://www.linkedin.com/in/omkar-sahu-805345344/',
     twitter: 'https://x.com/yourhandle',
   },
   stats: {
@@ -23,14 +24,33 @@ export const site = {
     projectsShipped: '10+',
     techStackSize: '15+',
   },
-  // --- PHASE 5 ADDITIONS ---
-  formspreeId: 'mgaagypz', // Replace with your Formspree form ID
-  resumeAvailable: true, // Flip to false if /resume.pdf is missing
+  formspreeId: 'mgaagypz',
+  resumeAvailable: true,
   resumeLastUpdated: 'November 2026',
   resumeHighlights: [
     'Built LecScribe: an AI-powered lecture automation system using Python, Faster-Whisper, and Llama 3.',
     'Developed dynamic web applications using Django, FastAPI, and Astro.',
     'Experienced with local, privacy-focused open-source AI pipelines.',
     'Actively preparing for GATE 2027 in Computer Science.'
+  ],
+
+  // --- PHASE 7: SEO ADDITIONS ---
+  url: 'https://omkarsahu.dev', // Replace with your final production URL (no trailing slash)
+  title: 'Omkar Sahu — Software & AI Engineer',
+  ogImage: '/og-image.png', // 1200x630 image in public/
+  twitterHandle: 'yourhandle', // No @ symbol
+  locale: 'en_IN', // Adjusted for India locale
+  themeColor: '#0d0d0d',
+  author: 'Omkar Sahu',
+  keywords: [
+    'software developer', 
+    'AI engineer', 
+    'python developer', 
+    'django', 
+    'fastapi', 
+    'full-stack', 
+    'portfolio', 
+    'Chhattisgarh',
+    'Bilaspur'
   ]
 };
