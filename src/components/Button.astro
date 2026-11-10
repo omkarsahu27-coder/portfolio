@@ -64,4 +64,18 @@ const Tag = href ? 'a' : 'button';
   .btn-ghost:hover {
     background-color: var(--surface);
   }
+  /* Added tactile active state and fixed primary text contrast */
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary {
+    background-color: var(--accent);
+    color: #050505; /* Contrast fix: Dark text on accent passes WCAG */
+  }
+  .btn-primary:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
 </style>

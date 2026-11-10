@@ -15,7 +15,13 @@ const formattedDate = date.toLocaleDateString('en-US', { month: 'short', year: '
 <article class:list={["project-card", { "is-featured": featured }]} data-tech={tech.join(',')}>
   <div class="image-wrapper">
     {image ? (
-      <img src={image} alt={imageAlt || `Screenshot of ${title}`} loading="lazy" />
+      <img 
+        src={image} 
+        alt={imageAlt || `Screenshot of ${title}`} 
+        loading="lazy" 
+        decoding="async" 
+        style="aspect-ratio: 16/9;"
+      />
     ) : (
       <div class="image-fallback">
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
@@ -203,5 +209,10 @@ const formattedDate = date.toLocaleDateString('en-US', { month: 'short', year: '
   .ext-link:hover, .ext-link:focus-visible {
     color: var(--accent);
     background-color: var(--surface);
+  }
+  .project-card:hover, .project-card:focus-within {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
   }
 </style>

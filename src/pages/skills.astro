@@ -16,8 +16,7 @@ const skills = await getSkillsByCategory();
     {skills.length > 0 ? (
       <div class="skills-grid">
         {skills.map((categoryGroup, index) => (
-          /* Using nth-child in CSS for subtle rotation, but setting an inline variable for ease */
-          <div class="skill-card" style={`--animation-delay: ${index * 50}ms`}>
+          <div class="skill-card reveal" data-delay={(index % 3) * 100}>
             <h2>{categoryGroup.category}</h2>
             <div class="skill-list">
               {categoryGroup.items.map(item => (

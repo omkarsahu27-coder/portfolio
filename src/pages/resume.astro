@@ -43,9 +43,9 @@ const pdfPath = "/resume.pdf";
 
         <div class="highlights-section">
           <h2>Highlights</h2>
-          <ul class="highlights-list">
-            {site.resumeHighlights.map(highlight => (
-              <li class="highlight-item">
+            <ul class="highlights-list">
+            {site.resumeHighlights.map((highlight, index) => (
+              <li class="highlight-item reveal" data-delay={(index % 3) * 100}>
                 <span class="check-icon" aria-hidden="true">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </span>

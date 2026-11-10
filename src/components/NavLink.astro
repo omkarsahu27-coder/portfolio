@@ -67,4 +67,28 @@ const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
     background-color: rgba(99, 102, 241, 0.1);
     border-left: 3px solid var(--accent);
   }
+  /* Animated underline instead of instant border */
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent);
+    border-radius: var(--radius-full);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 200ms var(--ease-out);
+  }
+
+  .nav-link:hover { color: var(--text); }
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  
+  .nav-link.active::after {
+    transform: scaleX(1);
+  }
 </style>

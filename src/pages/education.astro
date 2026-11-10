@@ -15,7 +15,7 @@ const education = await getEducationSorted();
     </div>
 {education.length > 0 ? (
       <div class="timeline">
-        {education.map((item) => {
+        {education.map((item, index) => {
           let dateDisplay = '';
           
           // Check if it has a single year of passing
@@ -32,7 +32,22 @@ const education = await getEducationSorted();
           }
             
           return (
-            <div class="timeline-item">
+      <div class="timeline">
+        {education.map((item, index) => {
+          let dateDisplay = '';
+          
+          if (item.data.yearOfPassing) {
+            dateDisplay = item.data.yearOfPassing;
+          } else if (item.data.startDate) {
+            const startDate = new Date(item.data.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            const endDate = item.data.endDate 
+              ? new Date(item.data.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) 
+              : 'Present';
+            dateDisplay = `${startDate} — ${endDate}`;
+          }
+            
+          return (
+            <div class="timeline-item reveal" data-delay={(index % 3) * 100}>
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <h3 class="degree">{item.data.degree}</h3>
@@ -43,6 +58,9 @@ const education = await getEducationSorted();
                 {item.data.description && <p class="description text-muted">{item.data.description}</p>}
               </div>
             </div>
+          );
+        })}
+      </div>
           );
         })}
       </div>

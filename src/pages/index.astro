@@ -35,19 +35,23 @@ const featuredProjects = await getFeaturedProjects();
     </div>
   </Section>
 
-  <!-- Section B: Featured Projects -->
-  <Section id="work" padding="lg">
+<!-- Section B: Featured Projects -->
+  <Section id="work" padding="lg" class="reveal">
     <div class="section-header">
       <h2>Featured Projects</h2>
       <p class="text-muted">A few things I've built recently.</p>
     </div>
-
+    
     {featuredProjects.length > 0 ? (
+      <>
       <div class="project-grid">
-        {featuredProjects.map(project => (
-          <ProjectCard project={project} featured={true} />
+        {featuredProjects.map((project, index) => (
+          <div class="reveal" data-delay={(index % 3) * 100}>
+            <ProjectCard project={project} featured={true} />
+          </div>
         ))}
       </div>
+      </>
       <div class="center-cta">
         <Button variant="secondary" href="/projects">See all projects</Button>
       </div>
