@@ -230,3 +230,9 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); }
     transition: none;
   }
 }
+
+.btn {
+  background-color: blue;
+  color: white;
+  /* add the rest of your button styles here */
+}
