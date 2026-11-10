@@ -1,10 +1,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
+
 export default defineConfig({
-  site: 'https://portfolio-7bbh-theta.vercel.app/', // Ensure this matches site.ts
+  site: 'https://portfolio-omkar-sahu.vercel.app', 
   integrations: [sitemap()],
-  compressHTML: true, // Performance optimization
 });
 
 // export default defineConfig({
