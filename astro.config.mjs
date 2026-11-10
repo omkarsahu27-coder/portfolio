@@ -9,6 +9,6 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://omkarsahu27-coder.github.io',
-  base: '/portfolio', // Omit if using a custom domain or user root page
-  // ... rest of config
+  base: '/portfolio', // Change this to match your exact GitHub repository name (or remove the line if using a custom domain or user root page)
+  integrations: [sitemap()],
 });
