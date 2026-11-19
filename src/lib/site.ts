@@ -37,7 +37,7 @@ export const site = {
   // --- PHASE 7: SEO ADDITIONS ---
   url: 'https://omkarsahu.dev', // Replace with your final production URL (no trailing slash)
   title: 'Omkar Sahu — Software & AI Engineer',
-  ogImage: '/og-image.png', // 1200x630 image in public/
+  ogImage: '/og-image.jpg', // 1200x630 image in public/
   twitterHandle: 'yourhandle', // No @ symbol
   locale: 'en_IN', // Adjusted for India locale
   themeColor: '#0d0d0d',
