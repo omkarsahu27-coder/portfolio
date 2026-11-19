@@ -16,6 +16,3 @@ What problem does this solve?
 
 ### The Solution
 How did you solve it? Talk about your architectural decisions and challenges overcome.
-
-## Technology Used
-what are tech tools are used in this project

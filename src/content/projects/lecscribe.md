@@ -19,8 +19,6 @@ I built an automated pipeline using local AI models to ensure data privacy and l
 
 * **Transcription:** Handled by Faster-Whisper.
 * **Summarization:** Structured using Llama 3 via Ollama.
-
-## Technology Used
-
+Technology Used:
 * **Front-End:** HTML5,CSS,Bootstrp.
 * **Back-End:** Python(FastAPI),Django.
