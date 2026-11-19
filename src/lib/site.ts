@@ -1,18 +1,18 @@
 export const site = {
   // --- EXISTING FIELDS ---
-  name: 'Omkar Sahu',
-  role: 'Software & AI Engineer',
+  name: 'Er.Omkar Sahu',
+  role: 'Student',
   tagline: 'Software developer building fast, accessible web apps and AI tools.',
   description: 'Passionate about crafting scalable architecture, integrating local AI models, and building in public.',
   bio: [
     "I'm a Computer Science graduate and Software & AI Engineer based in Bilaspur, Chhattisgarh. I specialize in building dynamic web applications using Python, Django, FastAPI, and modern frontend technologies.",
     "I am deeply interested in leveraging open-source local AI models (like Llama 3 and Faster-Whisper) to ensure data privacy and low latency in production environments, as seen in projects like my lecture automation system, LecScribe.",
-    "When I'm not configuring development environments or preparing for GATE, you can find me hiking the mountainous landscapes of Chhattisgarh, exploring local waterfalls, or producing video content set to classic 90s cinema soundtracks."
+    "When I'm not configuring development environments or preparing for any exam, you can find me hiking the mountainous landscapes of Chhattisgarh, exploring local waterfalls, or producing video content set to classic 90s cinema soundtracks."
   ],
   location: 'Bilaspur, Chhattisgarh, India',
-  focus: 'Full-stack Web & AI Integration',
-  currently: 'Building LecScribe & studying for GATE 2027',
-  openTo: 'Full-time software roles',
+  focus: 'Full-stack Web & AI Integration,NLP,LLM',
+  currently: 'Pursuing M.Tech in Information Technology',
+  openTo: 'i am not available for full time job roles',
   email: 'er.omkar2004@gmail.com',
   socials: {
     github: 'https://github.com/omkarsahu27-coder',
@@ -20,9 +20,9 @@ export const site = {
     twitter: 'https://x.com/yourhandle',
   },
   stats: {
-    yearsCoding: '3+',
-    projectsShipped: '10+',
-    techStackSize: '15+',
+    yearsCoding: '2+',
+    projectsShipped: '5+',
+    techStackSize: '10+',
   },
   formspreeId: 'mgaagypz',
   resumeAvailable: true,
